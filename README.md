@@ -1,37 +1,36 @@
-# Asignación: Modificaciones Demo Endianess
+# Asignación 5: XML + XSD
 
 **Materia:** Sistemas Distribuidos  
 **Alumno:** Ángel Cortez (ID: 252229)
 
 ## Descripción
-Práctica sobre serialización y deserialización de datos en formato de texto y binario, aplicando compatibilidad hacia atrás mediante el manejo de formatos y tamaños de bytes fijos al agregar el campo `categoria`.
+Proyecto para la captura, lectura y validación de productos mediante un esquema **XSD** (`producto.xsd`) y formato **XML** (`producto.xml`), manteniendo compatibilidad con archivos de texto y binarios.
 
-## Clases del proyecto
-- `Producto.java`: Contiene los atributos del producto (`clave`, `nombre`, `precio`, `cantidad`, `marca`, `fecha`, `categoria`). Si el campo `categoria` se deja en blanco o nulo, se asigna automáticamente el valor `"General"`.
-- `ProductoTextCodec.java`: Serializa y deserializa el producto en formato de texto delimitado por pipes (`|`). Si el registro contiene 6 campos (archivo viejo), asigna la categoría `"General"`; si contiene 7 campos (archivo nuevo), lee la categoría correspondiente.
-- `ProductoBinaryCodec.java`: Serializa y deserializa en binario utilizando `ByteBuffer` (Big Endian). Para registros nuevos utiliza una longitud fija de 101 bytes (agregando 15 bytes al final para la categoría). Para archivos viejos de 86 bytes, asigna automáticamente `"General"`.
-- `App.java`: Interfaz de consola para capturar los datos del producto, guardar y leer archivos tanto en texto como en binario, y verificar la lectura de archivos con el formato anterior.
+## Restricciones del Esquema (XSD)
+- **Clave:** 3 letras mayúsculas seguidas de 10 dígitos (ej. `ABC1234567890`).
+- **Nombre:** No vacío, máximo 30 caracteres.
+- **Precio:** Mayor a 0, menor a 10000 y con 2 decimales.
+- **Cantidad:** Entero mayor a 0 y menor a 100000.
+- **Marca:** Una de 10 marcas (`BOSCH`, `TOYOTA`, `HONDA`, `FORD`, `CHEVROLET`, `NISSAN`, `VOLKSWAGEN`, `SAMSUNG`, `LG`, `SONY`).
+- **Fecha:** Formato `DD/MM/AAAA`.
+- **Categoría:** Opcional (por defecto `"General"`).
 
-## Formato de datos
-- **Texto (`producto.txt`):**  
-  `Clave|Nombre|Precio|Cantidad|Marca|Fecha|Categoria`
-- **Binario (`producto.bin`):**  
-  - Clave: 6 bytes
-  - Nombre: 30 bytes
-  - Precio: 8 bytes (`double`)
-  - Cantidad: 4 bytes (`int`)
-  - Marca: 30 bytes
-  - Fecha: 8 bytes (`long`)
-  - Categoria: 15 bytes  
-  **Total:** 101 bytes (archivo nuevo) / 86 bytes (archivo viejo sin categoría).
+## Archivos Principales
+- `producto.xsd`: Esquema de validación XSD con las restricciones requeridas.
+- `producto.xml`: Archivo XML con datos de ejemplo válidos.
+- `src/main/java/com/mycompany/demoendianess/`:
+  - `Producto.java`: Modelo con validaciones en setters y atributos.
+  - `MarcaEnum.java`: Enumerador con las 10 marcas permitidas.
+  - `ProductoXmlCodec.java`: Serialización y validación XML contra `producto.xsd`.
+  - `ProductoTextCodec.java`: Manejo de archivo de texto delimitado (`|`).
+  - `ProductoBinaryCodec.java`: Manejo de archivo binario con tamaño fijo.
+  - `App.java`: Menú de consola para probar todas las operaciones.
 
-## Compilación y ejecución
-Compilar:
+## Compilación y Ejecución
 ```bash
+# Compilar
 javac -d target/classes src/main/java/com/mycompany/demoendianess/*.java
-```
 
-Ejecutar:
-```bash
+# Ejecutar
 java -cp target/classes com.mycompany.demoendianess.App
 ```

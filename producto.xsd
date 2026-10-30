@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+    <!-- Definición del elemento raíz 'producto' -->
+    <xs:element name="producto">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- Clave: 3 letras mayúsculas seguidas de 10 dígitos -->
+                <xs:element name="clave">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[A-Z]{3}[0-9]{10}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Nombre: no vacío y con un máximo de 30 caracteres -->
+                <xs:element name="nombre">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="30"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Precio: menor a 10000 y con 2 decimales -->
+                <xs:element name="precio">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minExclusive value="0"/>
+                            <xs:maxExclusive value="10000"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Cantidad: mayor a cero y menor a 100000 -->
+                <xs:element name="cantidad">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:minExclusive value="0"/>
+                            <xs:maxExclusive value="100000"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Marca: enumerador de 10 marcas posibles -->
+                <xs:element name="marca">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="BOSCH"/>
+                            <xs:enumeration value="TOYOTA"/>
+                            <xs:enumeration value="HONDA"/>
+                            <xs:enumeration value="FORD"/>
+                            <xs:enumeration value="CHEVROLET"/>
+                            <xs:enumeration value="NISSAN"/>
+                            <xs:enumeration value="VOLKSWAGEN"/>
+                            <xs:enumeration value="SAMSUNG"/>
+                            <xs:enumeration value="LG"/>
+                            <xs:enumeration value="SONY"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Fecha: formato DD/MM/AAAA -->
+                <xs:element name="fecha">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Categoría opcional (mantiene compatibilidad) -->
+                <xs:element name="categoria" type="xs:string" minOccurs="0" default="General"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
+
